@@ -28,3 +28,8 @@ def appium_driver(request):
 
     request.addfinalizer(fin)
     return driver
+
+def test_example(appium_driver):
+    print("Test started")
+    element = appium_driver.find_element(AppiumBy.ID, "com.tripadvisor.tripadvisor:id/bdlBtnSkip")
+    element.click()
