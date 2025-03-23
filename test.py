@@ -83,6 +83,25 @@ def test_example(appium_driver):
             print(f"Day {target_day} selected.")
         except NoSuchElementException:
             print(f"Day {target_day} not found.")
+        try:
+            # Search buttons
+            element = appium_driver.find_element(
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/btnPrimary")'
+            )
+            element.click()
+            time.sleep(5)
+            print("Button pressed.")
+        except NoSuchElementException:
+            print("Not found button.")
+        try:
+            element = appium_driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/btnAllDeals")'
+            )
+            element.click()
+            time.sleep(5)
+            print("Button pressed.")
+        except NoSuchElementException:
+            print("Not found button.")
     else:
         print(f"No such hotel: {target_hotel}")
 
