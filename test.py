@@ -58,7 +58,19 @@ def test_example(appium_driver):
         target_index = hotel_names.index(target_hotel)
         hotel_elements[target_index].click()
         time.sleep(5)
-        
+        target_date = "June 2025"
+        try:
+            # Using UiScrollable for scrilling to that date
+            element = appium_driver.find_element(
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                f'new UiScrollable(new UiSelector().scrollable(true))'
+                f'.scrollIntoView(new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/txtTitle").text("{target_date}"))'
+            )
+            # element.click()
+            time.sleep(10)
+            print(f"Date found: {target_date}")
+        except NoSuchElementException:
+            print(f"Not found date: {target_date}")
     else:
         print(f"No such hotel: {target_hotel}")
 
