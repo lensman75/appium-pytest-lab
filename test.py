@@ -45,6 +45,20 @@ def test_example(appium_driver):
     element_hotels.click()
     time.sleep(5)
 
+    # Looking for elements that contain hotel names
+    hotel_elements = appium_driver.find_elements(AppiumBy.XPATH, "//android.widget.TextView[@content-desc]")
+    time.sleep(5)
+    target_hotel = "The Chester Grosvenor" # The Chester Grosvenor selected as second iteration, because no results for The Grosvenor Hotel
+    time.sleep(5)
+    hotel_names = [element.get_attribute("content-desc").rstrip(". ") for element in hotel_elements]
+    time.sleep(5)
+    print(hotel_names)
+    if target_hotel in hotel_names:
+        print(f"Found hotel: {target_hotel}")
+        
+    else:
+        print(f"No such hotel: {target_hotel}")
+
     print("Test finished")
     time.sleep(5)
     appium_driver.get_screenshot_as_file("screenshot.png")
