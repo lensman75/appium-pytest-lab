@@ -3,6 +3,7 @@ import time
 from appium import webdriver
 from appium. options.common import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.common.exceptions import NoSuchElementException
 
 def initialize_appium_driver():
     desired_caps = {
