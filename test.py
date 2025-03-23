@@ -71,6 +71,18 @@ def test_example(appium_driver):
             print(f"Date found: {target_date}")
         except NoSuchElementException:
             print(f"Not found date: {target_date}")
+        target_day = "13"
+        try:
+            # Search for day
+            element = appium_driver.find_element(
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                f'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/txtDay").text("{target_day}")'
+            )
+            element.click()
+            time.sleep(5)
+            print(f"Day {target_day} selected.")
+        except NoSuchElementException:
+            print(f"Day {target_day} not found.")
     else:
         print(f"No such hotel: {target_hotel}")
 
