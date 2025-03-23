@@ -55,6 +55,9 @@ def test_example(appium_driver):
     print(hotel_names)
     if target_hotel in hotel_names:
         print(f"Found hotel: {target_hotel}")
+        target_index = hotel_names.index(target_hotel)
+        hotel_elements[target_index].click()
+        time.sleep(5)
         
     else:
         print(f"No such hotel: {target_hotel}")
