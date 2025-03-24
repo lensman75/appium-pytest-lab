@@ -30,36 +30,45 @@ def appium_driver(request):
     request.addfinalizer(fin)
     return driver
 
+
+
 def test_example(appium_driver):
+    sleep_duration = 7
+    target_day = "13"
+    target_date = "June 2025"
+    ENTER_KEY_CODE = 66
+    target_hotel = "The Chester Grosvenor" # The Chester Grosvenor selected as second iteration, because no results for The Grosvenor Hotel
+    seach_hotel = "The Grosvenor Hotel"
+
     print("Test started")
     element = appium_driver.find_element(AppiumBy.ID, "com.tripadvisor.tripadvisor:id/bdlBtnSkip")
     element.click()
-    time.sleep(5)
+    time.sleep(sleep_duration)
     tabsearch = appium_driver.find_element(AppiumBy.ID, "com.tripadvisor.tripadvisor:id/tab_search")
     tabsearch.click()
-    time.sleep(5)
+    time.sleep(sleep_duration)
     search_field = appium_driver.find_element(AppiumBy.ID, "com.tripadvisor.tripadvisor:id/edtSearchString")
-    search_field.send_keys("The Grosvenor Hotel")
-    appium_driver.press_keycode(66)
-    time.sleep(5)
+    search_field.send_keys(seach_hotel)
+    appium_driver.press_keycode(ENTER_KEY_CODE)
+    time.sleep(sleep_duration)
     element_hotels = appium_driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Hotels")')
     element_hotels.click()
-    time.sleep(5)
+    time.sleep(sleep_duration)
 
     # Looking for elements that contain hotel names
     hotel_elements = appium_driver.find_elements(AppiumBy.XPATH, "//android.widget.TextView[@content-desc]")
-    time.sleep(5)
-    target_hotel = "The Chester Grosvenor" # The Chester Grosvenor selected as second iteration, because no results for The Grosvenor Hotel
-    time.sleep(5)
+    time.sleep(sleep_duration)
+    
+    time.sleep(sleep_duration)
     hotel_names = [element.get_attribute("content-desc").rstrip(". ") for element in hotel_elements]
-    time.sleep(5)
+    time.sleep(sleep_duration)
     print(hotel_names)
     if target_hotel in hotel_names:
         print(f"Found hotel: {target_hotel}")
         target_index = hotel_names.index(target_hotel)
         hotel_elements[target_index].click()
-        time.sleep(5)
-        target_date = "June 2025"
+        time.sleep(sleep_duration)
+        
         try:
             # Using UiScrollable for scrilling to that date
             element = appium_driver.find_element(
@@ -68,11 +77,11 @@ def test_example(appium_driver):
                 f'.scrollIntoView(new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/txtTitle").text("{target_date}"))'
             )
             # element.click()
-            time.sleep(10)
+            time.sleep(sleep_duration)
             print(f"Date found: {target_date}")
         except NoSuchElementException:
             print(f"Not found date: {target_date}")
-        target_day = "13"
+        
         try:
             # Search for day
             element = appium_driver.find_element(
@@ -80,7 +89,7 @@ def test_example(appium_driver):
                 f'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/txtDay").text("{target_day}")'
             )
             element.click()
-            time.sleep(5)
+            time.sleep(sleep_duration)
             print(f"Day {target_day} selected.")
         except NoSuchElementException:
             print(f"Day {target_day} not found.")
@@ -91,7 +100,7 @@ def test_example(appium_driver):
                 'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/btnPrimary")'
             )
             element.click()
-            time.sleep(5)
+            time.sleep(sleep_duration)
             print("Button pressed.")
         except NoSuchElementException:
             print("Not found button.")
@@ -99,7 +108,7 @@ def test_example(appium_driver):
             element = appium_driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/btnAllDeals")'
             )
             element.click()
-            time.sleep(5)
+            time.sleep(sleep_duration)
             print("Button pressed.")
         except NoSuchElementException:
             print("Not found button.")
@@ -107,8 +116,8 @@ def test_example(appium_driver):
         print(f"No such hotel: {target_hotel}")
 
     print("Test finished")
-    time.sleep(5)
+    time.sleep(sleep_duration)
     # TODO(lensman75): Make crossplatform
     appium_driver.get_screenshot_as_file(r"screenshots\screenshot.png")
-    time.sleep(5)
+    time.sleep(sleep_duration)
     input("Press Enter, to exit...")
