@@ -108,6 +108,7 @@ def test_example(appium_driver):
 
     print("Test finished")
     time.sleep(5)
-    appium_driver.get_screenshot_as_file("screenshot.png")
+    # TODO(lensman75): Make crossplatform
+    appium_driver.get_screenshot_as_file(r"screenshots\screenshot.png")
     time.sleep(5)
     input("Press Enter, to exit...")
