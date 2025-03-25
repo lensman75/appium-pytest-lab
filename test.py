@@ -1,5 +1,6 @@
 import pytest
 import time
+import json
 from appium import webdriver
 from appium. options.common import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
@@ -147,6 +148,8 @@ def test_example(appium_driver):
                     provider:price
             }
             print(resp_dict)
+            with open(r"json\card.json", "w") as outfile:
+                json.dump(resp_dict, outfile, indent=4)
 
     else:
         print(f"No such hotel: {target_hotel}")
