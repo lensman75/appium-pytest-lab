@@ -112,6 +112,42 @@ def test_example(appium_driver):
             print("Button pressed.")
         except NoSuchElementException:
             print("Not found button.")
+        
+        #Provider and prices
+        cards = appium_driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,'new UiSelector().resourceId("com.tripadvisor.tripadvisor:id/cardHotelOffer")')
+        if not cards:
+            print("No cards found")
+        else:
+            print(f"Found {len(cards)} cards.\n")
+        resp_dict = {}
+        for i, card in enumerate(cards):
+            try:
+                provider = card.find_element(
+                    AppiumBy.ID,
+                    "com.tripadvisor.tripadvisor:id/imgProviderLogo"
+                ).get_attribute("content-desc")
+            except:
+                provider = "Provider not found"
+
+            try:
+                price = card.find_element(
+                    AppiumBy.ID,
+                    "com.tripadvisor.tripadvisor:id/txtPriceTopDeal"
+                ).text
+            except:
+                price = "Price not found"
+
+            print(f"Card: {i + 1}:")
+            print(f"Provider{i}: {provider}")
+            print(f"Price: {price}")
+
+            if target_hotel not in resp_dict:
+                resp_dict[target_hotel] = {}
+            resp_dict[target_hotel][target_date+"-"+target_day] = {
+                    provider:price
+            }
+            print(resp_dict)
+
     else:
         print(f"No such hotel: {target_hotel}")
 
