@@ -171,5 +171,5 @@ def test_example(appium_driver):
     time.sleep(sleep_duration)
     # TODO(lensman75): Make crossplatform
     appium_driver.get_screenshot_as_file(r"screenshots\screenshot.png")
-    time.sleep(sleep_duration)
-    input("Press Enter, to exit...")
+    # time.sleep(sleep_duration)
+    # input("Press Enter, to exit...")
