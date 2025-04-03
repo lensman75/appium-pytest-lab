@@ -1,10 +1,18 @@
 import pytest
 import time
 import json
+import argparse
+import os
 from appium import webdriver
 from appium. options.common import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.common.exceptions import NoSuchElementException
+
+# parser = argparse.ArgumentParser()
+# parser.add_argument("--hotel", type=str)
+# parser.add_argument("--day", type=int)
+# parser.add_argument("--date", type=str)
+# args = parser.parse_args()
 
 def initialize_appium_driver():
     desired_caps = {
@@ -35,10 +43,15 @@ def appium_driver(request):
 
 def test_example(appium_driver):
     sleep_duration = 7
-    target_day = "13"
-    target_date = "June 2025"
+    # target_day = "13"
+    target_day = os.getenv("DAY")
+    
+    # target_date = "June 2025"
+    target_date = os.getenv("DATE")
     ENTER_KEY_CODE = 66
-    target_hotel = "The Chester Grosvenor" # The Chester Grosvenor selected as second iteration, because no results for The Grosvenor Hotel
+    # target_hotel = "The Chester Grosvenor" # The Chester Grosvenor selected as second iteration, because no results for The Grosvenor Hotel
+    target_hotel = os.getenv("HOTEL")
+    print(target_day, target_date, target_hotel)
     seach_hotel = "The Grosvenor Hotel"
 
     print("Test started")
