@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
+import os
 
 app = FastAPI()
 status_message="<h1>Done</h1>"
@@ -29,3 +30,19 @@ def sometest():
 def stat():
     global status_message
     return f"{status_message}"
+
+@app.get("/booking/")
+def get_booking(HOTEL: str, DAY: str, DATE: str):
+    os.environ["HOTEL"] = HOTEL
+    os.environ["DAY"] = DAY
+    os.environ["DATE"] = DATE
+
+    print(f'env["HOTEL"] = "{HOTEL}"')
+    print(f'env["DAY"] = "{DAY}"')
+    print(f'env["DATE"] = "{DATE}"')
+
+    return {
+        "HOTEL": HOTEL,
+        "DAY": DAY,
+        "DATE": DATE
+    }
