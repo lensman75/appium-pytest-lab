@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
 import os
+import subprocess
 
 app = FastAPI()
 status_message="<h1>Done</h1>"
@@ -33,16 +34,29 @@ def stat():
 
 @app.get("/booking/")
 def get_booking(HOTEL: str, DAY: str, DATE: str):
-    os.environ["HOTEL"] = HOTEL
-    os.environ["DAY"] = DAY
-    os.environ["DATE"] = DATE
+    env = os.environ.copy()
+    env["HOTEL"] = HOTEL
+    env["DAY"] = DAY
+    env["DATE"] = DATE
 
-    print(f'env["HOTEL"] = "{HOTEL}"')
-    print(f'env["DAY"] = "{DAY}"')
-    print(f'env["DATE"] = "{DATE}"')
+    # print(f'env["HOTEL"] = "{HOTEL}"')
+    # print(f'env["DAY"] = "{DAY}"')
+    # print(f'env["DATE"] = "{DATE}"')
 
-    return {
-        "HOTEL": HOTEL,
-        "DAY": DAY,
-        "DATE": DATE
+    result = subprocess.run(
+        ["pytest", "-v", "-s", "test.py"],
+        shell=True,
+        env=env,
+        capture_output=True,
+        text=True
+    )
+    # return {
+    #     "HOTEL": HOTEL,
+    #     "DAY": DAY,
+    #     "DATE": DATE
+    # }
+    return{
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "returncode": result.returncode
     }
