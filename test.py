@@ -8,6 +8,8 @@ from appium. options.common import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.common.exceptions import NoSuchElementException
 
+json_path = r"json\card.json"
+
 # parser = argparse.ArgumentParser()
 # parser.add_argument("--hotel", type=str)
 # parser.add_argument("--day", type=int)
@@ -62,7 +64,8 @@ def test_example(appium_driver):
     tabsearch.click()
     time.sleep(sleep_duration)
     search_field = appium_driver.find_element(AppiumBy.ID, "com.tripadvisor.tripadvisor:id/edtSearchString")
-    search_field.send_keys(seach_hotel)
+    # search_field.send_keys(seach_hotel)
+    search_field.send_keys(target_hotel)
     appium_driver.press_keycode(ENTER_KEY_CODE)
     time.sleep(sleep_duration)
     element_hotels = appium_driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, 'new UiSelector().text("Hotels")')
@@ -133,7 +136,7 @@ def test_example(appium_driver):
             print("No cards found")
         else:
             print(f"Found {len(cards)} cards.\n")
-        resp_dict = {}
+        # resp_dict = {}
         for i, card in enumerate(cards):
             try:
                 provider = card.find_element(
@@ -155,14 +158,29 @@ def test_example(appium_driver):
             print(f"Provider{i}: {provider}")
             print(f"Price: {price}")
 
+
+
+            if os.path.exists(json_path):
+                with open(json_path, "r") as infile:
+                    try:
+                        resp_dict = json.load(infile)
+                    except json.JSONDecodeError:
+                        resp_dict = {}
+            else:
+                resp_dict = {}
+
             if target_hotel not in resp_dict:
                 resp_dict[target_hotel] = {}
-            resp_dict[target_hotel][target_date+"-"+target_day] = {
-                    provider:price
+
+            resp_dict[target_hotel][f"{target_date}-{target_day}"] = {
+                provider: price
             }
-            print(resp_dict)
-            with open(r"json\card.json", "w") as outfile:
+
+            with open(json_path, "w") as outfile:
                 json.dump(resp_dict, outfile, indent=4)
+
+
+
 
     else:
         print(f"No such hotel: {target_hotel}")
