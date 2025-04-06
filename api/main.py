@@ -1,13 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import PlainTextResponse, HTMLResponse
+from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
 
 app = FastAPI()
 status_message="<h1>Done</h1>"
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=JSONResponse)
 def read_root():
-    return {"Test message"}
+    return {"message":"Test message"}
 
 @app.get("/one", response_class=PlainTextResponse)
 def read_file():
