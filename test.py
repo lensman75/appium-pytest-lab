@@ -28,6 +28,7 @@ def initialize_appium_driver():
     }
 
     url = 'http://localhost:4723'
+    # url = 'http://10.255.255.254:4723/wd/hub'
     driver = webdriver.Remote(url, options=AppiumOptions().load_capabilities(desired_caps))
     return driver
 

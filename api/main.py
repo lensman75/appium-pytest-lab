@@ -1,10 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
+from redis import Redis
+from rq import Queue
 import os
-import subprocess
+# import subprocess
+
+from tasks import run_test
 
 app = FastAPI()
 status_message="<h1>Done</h1>"
+
+redis_conn = Redis()
+q = Queue(connection=redis_conn)
 
 
 @app.get("/", response_class=JSONResponse)
@@ -34,29 +41,36 @@ def stat():
 
 @app.get("/booking/")
 def get_booking(HOTEL: str, DAY: str, DATE: str):
-    env = os.environ.copy()
-    env["HOTEL"] = HOTEL
-    env["DAY"] = DAY
-    env["DATE"] = DATE
+    job = q.enqueue(run_test, HOTEL, DAY, DATE)
+    # env = os.environ.copy()
+    # env["HOTEL"] = HOTEL
+    # env["DAY"] = DAY
+    # env["DATE"] = DATE
 
     # print(f'env["HOTEL"] = "{HOTEL}"')
     # print(f'env["DAY"] = "{DAY}"')
     # print(f'env["DATE"] = "{DATE}"')
 
-    result = subprocess.run(
-        ["pytest", "-v", "-s", "test.py"],
-        shell=True,
-        env=env,
-        capture_output=True,
-        text=True
-    )
+    # result = subprocess.run(
+        # ["pytest", "-v", "-s", "test.py"],
+        # shell=True,
+        # env=env,
+        # capture_output=True,
+        # text=True
+    # )
     # return {
     #     "HOTEL": HOTEL,
     #     "DAY": DAY,
     #     "DATE": DATE
     # }
-    return{
-        "stdout": result.stdout,
-        "stderr": result.stderr,
-        "returncode": result.returncode
+    # return{
+    #     "stdout": result.stdout,
+    #     "stderr": result.stderr,
+    #     "returncode": result.returncode
+    # }
+
+    return {
+        "message": "Test started",
+        "job_id": job.get_id(),
+        "status": job.get_status()
     }
