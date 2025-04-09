@@ -1,17 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
-from redis import Redis
-from rq import Queue
+from api.tasks import run_test
+# from redis import Redis
+# from rq import Queue
 import os
 # import subprocess
 
-from tasks import run_test
 
 app = FastAPI()
 status_message="<h1>Done</h1>"
 
-redis_conn = Redis()
-q = Queue(connection=redis_conn)
+# redis_conn = Redis()
+# q = Queue(connection=redis_conn)
 
 
 @app.get("/", response_class=JSONResponse)
@@ -39,9 +39,12 @@ def stat():
     global status_message
     return f"{status_message}"
 
-@app.get("/booking/")
+@app.get("/booking/") #Change name, AddTask for example
 def get_booking(HOTEL: str, DAY: str, DATE: str):
-    job = q.enqueue(run_test, HOTEL, DAY, DATE)
+    # job = q.enqueue(run_test, HOTEL, DAY, DATE)
+    task = run_test.delay(HOTEL, DAY, DATE)
+    print("task: ", task)
+
     # env = os.environ.copy()
     # env["HOTEL"] = HOTEL
     # env["DAY"] = DAY
@@ -71,6 +74,6 @@ def get_booking(HOTEL: str, DAY: str, DATE: str):
 
     return {
         "message": "Test started",
-        "job_id": job.get_id(),
-        "status": job.get_status()
+        "job_id": task.id,
+        "status": task.status
     }

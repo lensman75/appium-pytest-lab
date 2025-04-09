@@ -24,13 +24,13 @@
 
 
 
-from redis import Redis
-from rq import Queue
-from rq.worker import SimpleWorker  # ← это работает в 1.10.1
+# from redis import Redis
+# from rq import Queue
+# from rq.worker import SimpleWorker  # ← это работает в 1.10.1
 
-redis_conn = Redis()
-queue = Queue(connection=redis_conn)
+# redis_conn = Redis()
+# queue = Queue(connection=redis_conn)
 
-if __name__ == '__main__':
-    worker = SimpleWorker([queue], connection=redis_conn)
-    worker.work()
+# if __name__ == '__main__':
+#     worker = SimpleWorker([queue], connection=redis_conn)
+#     worker.work()
