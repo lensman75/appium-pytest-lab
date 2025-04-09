@@ -5,6 +5,8 @@ from api.tasks import run_test
 # from rq import Queue
 import os
 # import subprocess
+from celery.result import AsyncResult
+from api.celery_app import app as celery_app
 
 
 app = FastAPI()
@@ -76,4 +78,13 @@ def get_booking(HOTEL: str, DAY: str, DATE: str):
         "message": "Test started",
         "job_id": task.id,
         "status": task.status
+    }
+
+@app.get("/get_task_status/{task_id}", response_class=JSONResponse)
+def get_task_status(task_id: str):
+    task_result = AsyncResult(task_id, app=celery_app)
+    return {
+        "task_id": task_id,
+        "status": task_result.status,
+        "result": task_result.result if task_result.ready() else None
     }
