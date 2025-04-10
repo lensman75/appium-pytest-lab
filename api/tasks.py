@@ -31,13 +31,14 @@ from api.celery_app import app
 import subprocess
 import os
 
-@app.task
-def run_test(HOTEL: str, DAY: str, DATE: str):
+@app.task(bind=True)
+def run_test(self, HOTEL: str, DAY: str, DATE: str):
     print(f"[TASK] Запуск теста для: {HOTEL}, {DAY}, {DATE}")
     env = os.environ.copy()
     env["HOTEL"] = HOTEL
     env["DAY"] = DAY
     env["DATE"] = DATE
+    env["TASK_ID"] = self.request.id
 
     os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
     test_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test.py"))
