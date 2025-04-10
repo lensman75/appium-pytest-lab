@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse
+from fastapi.responses import PlainTextResponse, HTMLResponse, JSONResponse, FileResponse
 from api.tasks import run_test
 # from redis import Redis
 # from rq import Queue
@@ -88,3 +88,11 @@ def get_task_status(task_id: str):
         "status": task_result.status,
         "result": task_result.result if task_result.ready() else None
     }
+
+@app.get("/get_screenshot/{task_id}", response_class=FileResponse)
+def get_screenshot(task_id: str):
+    screenshot_path = os.path.join("screenshots", f"screenshot_{task_id}.png")
+    
+    # TODO: Add error catching
+    
+    return FileResponse(screenshot_path, media_type="image/png", filename=f"screenshot_{task_id}.png")
