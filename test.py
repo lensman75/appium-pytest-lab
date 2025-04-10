@@ -28,6 +28,7 @@ def initialize_appium_driver():
     }
 
     url = 'http://localhost:4723'
+    # url = 'http://10.255.255.254:4723/wd/hub'
     driver = webdriver.Remote(url, options=AppiumOptions().load_capabilities(desired_caps))
     return driver
 
@@ -188,6 +189,11 @@ def test_example(appium_driver):
     print("Test finished")
     time.sleep(sleep_duration)
     # TODO(lensman75): Make crossplatform
-    appium_driver.get_screenshot_as_file(r"screenshots\screenshot.png")
+    # appium_driver.get_screenshot_as_file(r"screenshots\screenshot.png")
+    task_id = os.getenv("TASK_ID", "noid")
+    screenshot_path = os.path.join("screenshots", f"screenshot_{task_id}.png")
+    os.makedirs(os.path.dirname(screenshot_path), exist_ok=True)
+    appium_driver.get_screenshot_as_file(screenshot_path)
+
     # time.sleep(sleep_duration)
     # input("Press Enter, to exit...")
