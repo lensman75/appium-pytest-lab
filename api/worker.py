@@ -12,7 +12,7 @@
 
 # from redis import Redis
 # from rq import Queue
-# from rq.worker import SimpleWorker  # Импорт из нового места в RQ 2.x
+# from rq.worker import SimpleWorker
 
 # redis_conn = Redis()
 # queue = Queue(connection=redis_conn)
@@ -26,7 +26,7 @@
 
 # from redis import Redis
 # from rq import Queue
-# from rq.worker import SimpleWorker  # ← это работает в 1.10.1
+# from rq.worker import SimpleWorker  # ← This works in 1.10.1
 
 # redis_conn = Redis()
 # queue = Queue(connection=redis_conn)
