@@ -174,7 +174,9 @@ def test_example(appium_driver):
                 resp_dict[target_hotel] = {}
 
             resp_dict[target_hotel][f"{target_date}-{target_day}"] = {
-                provider: price
+                "provider": provider,
+                "price": price,
+                "screenshot": os.path.join("screenshots", f"screenshot_{os.getenv('TASK_ID', 'noid')}.png")
             }
 
             with open(json_path, "w") as outfile:
